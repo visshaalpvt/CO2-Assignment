@@ -1,0 +1,1 @@
+Source: `VISSHAAL R - CO2 ASSIGNMENT.pdf` (8 pages). The uploaded PDF lists Assignment 2 – CO2, Total Marks 50, and has a blank submission date (page 1); the class announcement says 100 points due Oct 29. Confirm with LMS/faculty. Q7 is explicitly a redesign based on measured Q1–Q6 evidence, so complete it after running experiments.

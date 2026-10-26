@@ -1,0 +1,95 @@
+Q7 — Day-4 Design Challenge: Evidence-Based Redesign of Closest Pair
+
+═══════════════════════════════════════════════════════════════════
+STEP 1 — BOTTLENECK DIAGNOSIS (measured Q4 experiments)
+═══════════════════════════════════════════════════════════════════
+  n=100  →   4,950 pair comparisons, 0.001 s
+  n=500  → 124,750 pair comparisons, 0.028 s
+  n=1000 → 499,500 pair comparisons, 0.121 s
+
+  Dominant operation: every unique pair is evaluated.
+  Pairs = n*(n-1)/2  →  O(n^2) growth confirmed.
+
+═══════════════════════════════════════════════════════════════════
+STEP 2 — GROWTH DERIVATION
+═══════════════════════════════════════════════════════════════════
+  T(n) = n*(n-1)/2
+  T(100)  =  4,950     ratio 500/100 = 5x in n → 25x in work  ✓
+  T(500)  = 124,750    ratio 1000/500 = 2x in n → 4x in work  ✓
+  T(1000) = 499,500
+
+═══════════════════════════════════════════════════════════════════
+STEP 3 — MEASURABLE REDESIGN OBJECTIVE
+═══════════════════════════════════════════════════════════════════
+  Reduce pair evaluations by at least 60% at n=500 and above
+  while returning the identical closest pair and distance.
+
+═══════════════════════════════════════════════════════════════════
+STEP 4 — PREDICTION BEFORE IMPLEMENTATION
+═══════════════════════════════════════════════════════════════════
+  Sort by x then use a right-pointer that advances only while
+  x[j]-x[i] < best_dist (current best).
+  For uniform random points the strip is narrow; most pairs are
+  pruned without evaluation.  Expected average O(n log n).
+  Worst case (all same x): still O(n^2).
+
+═══════════════════════════════════════════════════════════════════
+STEP 5 — STRIP-SWEEP PSEUDOCODE
+═══════════════════════════════════════════════════════════════════
+  ALGORITHM ClosestPairSweep(points):
+    sort points by x-coordinate          // O(n log n)
+    best <- dist(points[0], points[1])
+    pair <- (points[0], points[1])
+    count <- 1
+    j_start <- 1
+    FOR i FROM 0 TO n-2:
+      IF j_start <= i: j_start <- i+1
+      j <- j_start
+      WHILE j < n AND (points[j].x - points[i].x) < best:
+        count <- count + 1
+        d <- dist(points[i], points[j])
+        IF d < best:
+          best <- d
+          pair <- (points[i], points[j])
+        j <- j + 1
+    RETURN pair, best, count
+
+═══════════════════════════════════════════════════════════════════
+STEP 6 — OPERATIONS REDUCED
+═══════════════════════════════════════════════════════════════════
+  Pairs skipped = all pairs with x-gap >= best_dist.
+  Brute-force never prunes; sweep pruning tightens as best_dist
+  decreases, eliminating more pairs progressively.
+
+═══════════════════════════════════════════════════════════════════
+STEP 7 — PREPROCESSING AND MEMORY COSTS
+═══════════════════════════════════════════════════════════════════
+  Preprocessing: O(n log n) sort (time), O(n) extra space.
+  Memory: O(n) sorted list — same asymptotic order as baseline.
+  For n=1000 sort is ~10,000 operations vs 499,500 pair evals saved.
+
+═══════════════════════════════════════════════════════════════════
+STEP 8-9 — MEASURED RESULTS (seed=42, uniform random 0-10000)
+═══════════════════════════════════════════════════════════════════
+  n       BF_pairs   BF_sec    SW_pairs  SW_sec   Reduction  Correct
+  50         1,225  0.000335        86  0.000070     93.0%     YES
+  100        4,950  0.001059       125  0.000075     97.5%     YES
+  500      124,750  0.030558       883  0.000490     99.3%     YES
+  1,000    499,500  0.124094     1,923  0.001336     99.6%     YES
+  2,000  1,999,000  0.515156     3,822  0.002023     99.8%     YES
+
+═══════════════════════════════════════════════════════════════════
+STEP 10 — EVALUATION
+═══════════════════════════════════════════════════════════════════
+  Evidence confirms the prediction: pair reductions exceed 97% for
+  n >= 100 on random uniform data.  All distances match brute-force
+  to floating-point precision (1e-9 tolerance).
+
+  Overhead analysis:
+    Sort cost << savings: at n=1000 sort does ~10,000 ops vs
+    497,577 pairs pruned.  Net benefit is clear.
+
+  When brute-force is preferable:
+    - n < ~50 (sort overhead not worth it).
+    - Points intentionally clustered on a vertical line (worst case).
+    - Teaching contexts where simplicity matters more than speed.

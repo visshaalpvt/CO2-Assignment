@@ -1,0 +1,10 @@
+EXHAUSTIVE_KNAPSACK(packages, capacity)
+ bestValue = 0; bestSubset = empty
+ for mask = 0 to 2^n - 1:
+   totalWeight = 0; totalValue = 0; subset = empty
+   for i = 0 to n-1:
+      if bit i of mask is 1:
+         add package i to subset; accumulate weight and value
+   if totalWeight <= capacity and totalValue > bestValue:
+      bestValue = totalValue; bestSubset = subset
+ return bestSubset, bestValue, number of subsets examined

@@ -1,0 +1,5 @@
+SEQUENTIAL_SEARCH(records, target_id)
+ for i = 0 to length(records)-1:
+   comparisons += 1
+   if records[i].tool_id == target_id: return (i, comparisons)
+ return (-1, comparisons)

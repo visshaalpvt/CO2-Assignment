@@ -1,0 +1,11 @@
+BRUTE_FORCE_HULL(P)
+ H = empty set
+ for every unordered pair (p,q), p != q:
+   hasPositive = false; hasNegative = false
+   for each r not equal to p or q:
+      s = (q.x-p.x)*(r.y-p.y) - (q.y-p.y)*(r.x-p.x)
+      update hasPositive if s>0 and hasNegative if s<0
+   if not (hasPositive and hasNegative):
+      add p and q to hull candidate set
+ order unique hull vertices around centroid by polar angle
+ return ordered vertices

@@ -1,0 +1,10 @@
+BRUTE_FORCE_MATCH(text, pattern)
+ positions = []
+ for shift = 0 to n-m:
+   j = 0
+   while j < m and text[shift+j] == pattern[j]:
+     character_comparisons += 1
+     j += 1
+   if j < m: character_comparisons += 1
+   if j == m: append shift
+ return positions, character_comparisons

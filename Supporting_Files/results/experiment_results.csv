@@ -1,0 +1,9 @@
+algorithm,n,seconds,primary_operation_count
+closest_pair,100,0.001997,4950
+closest_pair,500,0.028294,124750
+closest_pair,1000,0.121213,499500
+exhaustive_knapsack,4,4.7e-05,16
+exhaustive_knapsack,8,0.000522,256
+exhaustive_knapsack,12,0.008674,4096
+exhaustive_knapsack,16,0.204904,65536
+exhaustive_knapsack,18,0.907941,262144
